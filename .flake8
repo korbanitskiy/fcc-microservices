@@ -1,0 +1,18 @@
+[flake8]
+max-line-length = 120
+exclude = .git,
+    __pycache__,
+    old,
+    build,
+    dist,
+    .venv,
+    .vscode,
+    .pytest_cache,
+    src/lsm/simulator/,
+    *migrations/versions*
+
+# Defaults only
+ignore = E121,E123,E126,E226,E24,E704,W503,W504,W605
+
+# Defaults + mutable as default params
+select = E,F,W,C90,B006

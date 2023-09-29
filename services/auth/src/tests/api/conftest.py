@@ -1,9 +1,7 @@
 import pytest
+from auth.app import create_app
 from fastapi import FastAPI
 from httpx import AsyncClient
-
-from auth.app import create_app
-
 
 
 @pytest.fixture(scope="session")

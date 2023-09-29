@@ -27,5 +27,5 @@ stop: ## Stops all services
 
 
 .PHONY: format
-format: 
+format:
 	@ ruff --fix src/

@@ -1,5 +1,6 @@
-import pydantic
 from functools import cache
+
+import pydantic
 
 
 class BaseSettings(pydantic.BaseSettings):

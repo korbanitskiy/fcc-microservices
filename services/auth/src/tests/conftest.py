@@ -1,9 +1,8 @@
-import pytest
-import sqlalchemy
 import asyncio
 
-from auth.app import metadata, database
-
+import pytest
+import sqlalchemy
+from auth.app import database, metadata
 
 DATABASE_URL = "sqlite://"
 

@@ -1,5 +1,5 @@
 import ormar
-from auth.app import metadata, database
+from auth.app import database, metadata
 
 
 class OrmarMeta(ormar.ModelMeta):
