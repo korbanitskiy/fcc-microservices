@@ -35,8 +35,15 @@ class DBSettings(BaseSettings):
         )
 
 
+class AuthSettings(BaseSettings):
+    SECRET_KEY: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ALGORITHM = "HS256"
+
+
 class AppSettings(BaseSettings):
     db = DBSettings()
+    auth = AuthSettings()
 
 
 @cache
