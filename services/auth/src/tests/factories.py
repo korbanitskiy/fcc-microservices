@@ -1,10 +1,10 @@
 import asyncio
 import inspect
 
-from factory.base import Factory
-from factory import Sequence
 from auth.models import User
 from auth.services import get_password_hash
+from factory import Sequence
+from factory.base import Factory
 
 
 class OrmarFactory(Factory):

@@ -1,5 +1,6 @@
-from tests.factories import UserFactory
 from unittest.mock import ANY
+
+from tests.factories import UserFactory
 
 
 async def test_health_check(http_client):

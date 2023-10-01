@@ -1,11 +1,11 @@
-from passlib.context import CryptContext
+from datetime import datetime, timedelta
+from typing import Optional
+
 import ormar
 from auth.models import User
-from typing import Optional
-from datetime import timedelta, datetime
-from jose import JWTError, jwt
 from auth.settings import get_app_settings
-
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

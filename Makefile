@@ -2,5 +2,5 @@ SHELL = /bin/bash
 
 
 .PHONY: format
-format: 
+format:
 	@ pre-commit run --all-files
