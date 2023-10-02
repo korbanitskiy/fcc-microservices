@@ -1,38 +1,42 @@
-from auth import models, schemas
-from auth import services as svc
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm
 from typing_extensions import Annotated
+from datetime import datetime, timedelta
 
-router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+from auth import models, schemas, services, context, settings
+
+login_router = APIRouter()
+users_router = APIRouter(dependencies=[Depends(context.get_current_user)])
 
 
-@router.get("/health-check")
+@login_router.get("/health-check")
 async def health_check():
     return {"status": "ok"}
 
 
-@router.post("/login", response_model=schemas.Token)
-async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-    user = await svc.authenticate_user(form_data.username, form_data.password)
+@login_router.post("/login", response_model=schemas.Token)
+async def login(
+    settings: Annotated[settings.AppSettings, Depends(context.get_app_settings)],
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    user_service: Annotated[services.UserService, Depends(context.get_user_service)],
+):
+    user = await user_service.authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = svc.create_access_token(user)
-    return {"access_token": access_token, "token_type": "bearer"}
+    return user_service.create_access_token(user)
 
 
-@router.get("/users/me/", response_model=models.User)
-async def get_users_me(token: Annotated[str, Depends(oauth2_scheme)]):
-    user = await svc.get_current_user(token)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+@users_router.get("/users/me/", response_model=models.User)
+async def get_users_me(user: Annotated[models.User, Depends(context.get_current_user)]):
     return user
+
+
+@users_router.get("/users", response_model=list[models.User])
+async def get_users_list(
+    user_service: Annotated[services.UserService, Depends(context.get_user_service)],
+) -> list[models.User]:
+    return await user_service.get_active_users()

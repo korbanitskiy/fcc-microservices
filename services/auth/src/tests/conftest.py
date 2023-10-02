@@ -1,12 +1,11 @@
 import asyncio
-import os
 
 import pytest
 import sqlalchemy
-from auth.models import database, metadata
-from auth.settings import get_app_settings
+from auth import models, settings, services
+from tests.factories import UserFactory
 
-app_settings = get_app_settings()
+app_settings = settings.get_app_settings()
 engine = sqlalchemy.create_engine(app_settings.db.uri, connect_args={"check_same_thread": False})
 
 
@@ -19,20 +18,29 @@ def event_loop(request):
 
 @pytest.fixture(scope="session")
 def create_test_database():
-    print(app_settings.db.uri)
-    metadata.create_all(engine)
+    models.metadata.create_all(engine)
     yield
-    metadata.drop_all(engine)
+    models.metadata.drop_all(engine)
 
 
 @pytest.fixture(scope="session")
 async def app_db(create_test_database):
-    with database.force_rollback():
-        async with database:
-            yield database
+    with models.database.force_rollback():
+        async with models.database:
+            yield models.database
+
+
+@pytest.fixture(scope="session")
+async def auth_user(app_db):
+    return await UserFactory.create()
 
 
 @pytest.fixture(autouse=True)
 async def db_transaction(app_db):
     async with app_db.transaction(force_rollback=True):
         yield app_db
+
+
+@pytest.fixture(scope="session")
+def user_service():
+    return services.UserService(app_settings)
