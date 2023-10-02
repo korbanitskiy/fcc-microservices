@@ -2,8 +2,10 @@ import asyncio
 
 import pytest
 import sqlalchemy
-from auth import models, settings, services
-from tests.factories import UserFactory
+
+from auth import models, services, settings
+
+from .factories import UserFactory
 
 app_settings = settings.get_app_settings()
 engine = sqlalchemy.create_engine(app_settings.db.uri, connect_args={"check_same_thread": False})
@@ -31,8 +33,8 @@ async def app_db(create_test_database):
 
 
 @pytest.fixture(scope="session")
-async def auth_user(app_db):
-    return await UserFactory.create()
+async def admin_user(app_db):
+    return await UserFactory.create(name="admin")
 
 
 @pytest.fixture(autouse=True)

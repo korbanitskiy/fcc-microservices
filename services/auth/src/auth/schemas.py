@@ -12,4 +12,4 @@ class UserResponse(BaseModel):
     disabled: bool
 
     class Config:
-        orm_mode=True
+        orm_mode = True

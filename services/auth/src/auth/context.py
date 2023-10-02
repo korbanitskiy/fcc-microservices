@@ -1,7 +1,7 @@
-from fastapi import Depends
 from typing import Annotated
-from fastapi.security import OAuth2PasswordBearer
+
 from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 
 from auth import models, services, settings
 

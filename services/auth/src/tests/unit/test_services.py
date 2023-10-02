@@ -1,8 +1,10 @@
-from freezegun import freeze_time
-from auth import services
 from calendar import timegm
 from datetime import datetime, timedelta
+
+from freezegun import freeze_time
 from tests.factories import UserFactory
+
+from auth import services
 
 
 async def test_authenticate_user_not_found(user_service: services.UserService):

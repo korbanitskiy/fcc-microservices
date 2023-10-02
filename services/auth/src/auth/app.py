@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from auth import views, models
+from auth import models, views
 
 
 def create_app():

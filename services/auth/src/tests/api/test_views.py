@@ -1,7 +1,10 @@
 from unittest.mock import ANY
+
 from httpx import AsyncClient
-from tests.factories import UserFactory
+
 from auth import models
+
+from ..factories import UserFactory
 
 
 async def test_health_check(http_client: AsyncClient):
@@ -35,19 +38,15 @@ async def test_access_by_token(http_client: AsyncClient):
     token = login_response.json()["access_token"]
 
     user_response = await http_client.get(
-        "/users/me",
-        follow_redirects=True,
-        headers={
-            "Authorization": f"bearer {token}"
-        }
+        "/users/me", follow_redirects=True, headers={"Authorization": f"bearer {token}"}
     )
 
     assert user_response.status_code == 200
     assert user_response.json() == user.dict()
 
 
-async def test_get_users_list(http_client: AsyncClient, auth_user: models.User):
-    users = [auth_user] + await UserFactory.create_batch(2)
+async def test_get_users_list(http_client: AsyncClient, admin_user: models.User):
+    users = [admin_user] + await UserFactory.create_batch(2)
 
     response = await http_client.get("/users")
 

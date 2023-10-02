@@ -1,8 +1,8 @@
-import ormar
+import os
+
 import databases
 import ormar
 import sqlalchemy
-import os
 
 from auth.settings import get_app_settings
 
@@ -21,7 +21,7 @@ class User(ormar.Model):
         tablename = "user"
 
     id: int = ormar.Integer(primary_key=True)
-    name: str = ormar.String(max_length=128, unique=True, min_length=6)
+    name: str = ormar.String(max_length=128, unique=True, min_length=5)
     password: str = ormar.String(max_length=255)
     disabled: bool = ormar.Boolean()
 

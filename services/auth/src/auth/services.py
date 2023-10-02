@@ -4,7 +4,8 @@ from typing import Optional
 import ormar
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from auth import schemas, models, settings
+
+from auth import models, schemas, settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -18,7 +19,6 @@ def get_password_hash(password) -> str:
 
 
 class UserService:
-
     def __init__(self, settings: settings.AppSettings) -> None:
         self.settings = settings
 
@@ -30,7 +30,7 @@ class UserService:
         }
         token = jwt.encode(payload, self.settings.auth.SECRET_KEY, algorithm=self.settings.auth.ALGORITHM)
         return schemas.Token(access_token=token, token_type="bearer")
-    
+
     def decode_access_token(self, token: str) -> dict:
         try:
             return jwt.decode(token, self.settings.auth.SECRET_KEY, algorithms=[self.settings.auth.ALGORITHM])
