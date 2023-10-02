@@ -1,10 +1,13 @@
 import asyncio
+import os
 
 import pytest
 import sqlalchemy
 from auth.models import database, metadata
+from auth.settings import get_app_settings
 
-DATABASE_URL = "sqlite://"
+app_settings = get_app_settings()
+engine = sqlalchemy.create_engine(app_settings.db.uri, connect_args={"check_same_thread": False})
 
 
 @pytest.fixture(scope="session")
@@ -16,7 +19,7 @@ def event_loop(request):
 
 @pytest.fixture(scope="session")
 def create_test_database():
-    engine = sqlalchemy.create_engine(DATABASE_URL)
+    print(app_settings.db.uri)
     metadata.create_all(engine)
     yield
     metadata.drop_all(engine)
