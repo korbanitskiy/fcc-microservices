@@ -1,7 +1,7 @@
 from functools import cache
 
-import pydantic
 import pika
+import pydantic
 
 
 class BaseSettings(pydantic.BaseSettings):

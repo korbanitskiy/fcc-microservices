@@ -1,8 +1,7 @@
 from fastapi import FastAPI
-
-from gateway import views, clients, settings
 from tenacity import retry, stop_after_attempt, wait_fixed
 
+from gateway import clients, settings, views
 
 settings = settings.get_app_settings()
 
@@ -42,6 +41,6 @@ async def shutdown() -> None:
 
     if message_bus.is_connected:
         message_bus.disconnect()
-    
+
     if mongodb.is_connected:
         mongodb.disconnect()

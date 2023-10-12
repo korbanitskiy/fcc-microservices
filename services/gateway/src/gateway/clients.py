@@ -1,8 +1,9 @@
-from gateway import settings, schemas
 import httpx
-import pika
 import orjson
+import pika
 from pymongo import MongoClient
+
+from gateway import schemas, settings
 
 
 class AuthClient:
@@ -16,7 +17,7 @@ class AuthClient:
         )
         response.raise_for_status()
         return schemas.Token(**response.json())
-    
+
     def get_user(self, token: str) -> schemas.User:
         response = httpx.get(
             url=self.settings.services.AUTH_SERVICE_ADDRESS + "/users/me",
@@ -24,7 +25,6 @@ class AuthClient:
         )
         response.raise_for_status()
         return schemas.User(**response.json())
-
 
 
 class MessageBusClient:
@@ -40,21 +40,17 @@ class MessageBusClient:
     def connect(self):
         self.connection = pika.BlockingConnection(self.settings.message_bus.connection_params)
         self.channel = self.connection.channel()
-    
+
     def disconnect(self):
         if self.connection:
             self.connection.close()
             self.connection = None
             self.channel = None
-    
+
     def publish(self, routing_key: str, message: dict):
         assert self.channel, "Clien is not connected"
 
-        self.channel.basic_publish(
-            exchange="",
-            routing_key=routing_key,
-            body=orjson.dumps(message)
-        )
+        self.channel.basic_publish(exchange="", routing_key=routing_key, body=orjson.dumps(message))
 
 
 class MongoDBClient:
@@ -72,7 +68,7 @@ class MongoDBClient:
             port=self.settings.db.MONGODB_PORT,
             connect=True,
         )
-    
+
     def disconnect(self):
         if self.client:
             self.client.close()

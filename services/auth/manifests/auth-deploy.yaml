@@ -18,7 +18,7 @@ spec:
     metadata:
       labels:
         app: auth
-    spec: 
+    spec:
       containers:
         - name: auth
           image: dimakorbanytsky/fcc-micro-auth
@@ -27,5 +27,5 @@ spec:
           envFrom:
             - configMapRef:
                 name: auth-configmap
-            - secretRef: 
+            - secretRef:
                 name: auth-secret

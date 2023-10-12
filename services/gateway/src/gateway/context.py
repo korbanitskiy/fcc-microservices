@@ -1,9 +1,9 @@
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
 import pymongo
-from gateway import services, settings, clients, app
+from fastapi import Depends
+
+from gateway import app, clients, services, settings
 
 
 def get_app_settings() -> settings.AppSettings:
