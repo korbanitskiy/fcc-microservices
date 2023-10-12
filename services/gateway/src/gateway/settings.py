@@ -1,6 +1,7 @@
 from functools import cache
 
 import pydantic
+import pika
 
 
 class BaseSettings(pydantic.BaseSettings):
@@ -15,6 +16,18 @@ class MongoDBSettings(BaseSettings):
     MONGODB_PORT: int = 27017
 
 
+class MessageBusSettings(BaseSettings):
+    MESSAGE_BUS_HOST: str = "localhost"
+    MESSAGE_BUS_PORT: int = 5672
+
+    @property
+    def connection_params(self) -> pika.ConnectionParameters:
+        return pika.ConnectionParameters(
+            host=self.MESSAGE_BUS_HOST,
+            port=self.MESSAGE_BUS_PORT,
+        )
+
+
 class ServicesAddressSettings(BaseSettings):
     AUTH_SERVICE_ADDRESS: str
     VIDEO_CONVERTER_SERVICE_ADDRESS: str
@@ -22,6 +35,7 @@ class ServicesAddressSettings(BaseSettings):
 
 class AppSettings(BaseSettings):
     db = MongoDBSettings()
+    message_bus = MessageBusSettings()
     services = ServicesAddressSettings()
 
 

@@ -24,8 +24,3 @@ stop: ## Stops all services
 	@ echo "[stop]: stopping docker containers..."
 	@ docker-compose stop
 	@ echo "[stop]: DONE"
-
-
-.PHONY: format
-format:
-	@ ruff --fix src/

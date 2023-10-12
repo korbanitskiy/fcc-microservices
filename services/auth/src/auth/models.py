@@ -24,6 +24,7 @@ class User(ormar.Model):
     name: str = ormar.String(max_length=128, unique=True, min_length=5)
     password: str = ormar.String(max_length=255)
     disabled: bool = ormar.Boolean()
+    is_admin: bool = ormar.Boolean()
 
 
 # Model should be cachable for DebugToolbar tracking
