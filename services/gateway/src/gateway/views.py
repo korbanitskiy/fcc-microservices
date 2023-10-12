@@ -1,11 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
-from typing_extensions import Annotated
-from fastapi.security import OAuth2PasswordBearer
-from fastapi import UploadFile
+from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
-from gateway import context, clients, schemas, services
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from typing_extensions import Annotated
 
+from gateway import clients, context, schemas, services
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
@@ -14,7 +12,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 @router.post("/login", response_model=schemas.Token)
 def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    auth_client: Annotated[clients.AuthClient, Depends(context.get_auth_client)]
+    auth_client: Annotated[clients.AuthClient, Depends(context.get_auth_client)],
 ):
     return auth_client.login(form_data.username, form_data.password)
 

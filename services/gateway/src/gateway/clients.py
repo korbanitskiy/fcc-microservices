@@ -57,7 +57,7 @@ class MessageBusClient:
             body=orjson.dumps(message),
             properties=pika.BasicProperties(
                 delivery_mode=pika.DeliveryMode.Persistent,
-            )
+            ),
         )
 
 

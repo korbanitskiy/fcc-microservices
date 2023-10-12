@@ -3,8 +3,8 @@ from typing import Annotated
 import pymongo
 from fastapi import Depends
 
-from gateway.app import app
 from gateway import clients, services, settings
+from gateway.app import app
 
 
 def get_app_settings() -> settings.AppSettings:
@@ -27,7 +27,4 @@ def get_gateway_service(
     message_bus: Annotated[clients.MessageBusClient, Depends(get_message_bus)],
     mongodb: Annotated[pymongo.MongoClient, Depends(get_mongodb)],
 ) -> services.GatewayService:
-    return services.GatewayService(
-        message_bus,
-        mongodb
-    )
+    return services.GatewayService(message_bus, mongodb)

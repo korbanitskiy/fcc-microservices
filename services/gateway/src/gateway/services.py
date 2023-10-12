@@ -1,8 +1,9 @@
-from gateway import clients, schemas
-from pymongo import MongoClient
-import gridfs
 import typing
-import io
+
+import gridfs
+from pymongo import MongoClient
+
+from gateway import clients, schemas
 
 
 class GatewayService:
@@ -25,12 +26,7 @@ class GatewayService:
 
     def notify_video_service(self, user: schemas.User, video_id: str):
         self.message_bus.publish(
-            queue="video",
-            message={
-                "video_id": video_id,
-                "audio_id": None,
-                "user": user.model_dump()
-            }
+            queue="video", message={"video_id": video_id, "audio_id": None, "user": user.model_dump()}
         )
 
     def download_audio(self, audio_id: str):
