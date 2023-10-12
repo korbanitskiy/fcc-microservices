@@ -28,8 +28,8 @@ class AuthClient:
 
 
 class MessageBusClient:
-    def __init__(self, settings: settings.AppSettings) -> None:
-        self.settings = settings
+    def __init__(self, app_settings: settings.AppSettings) -> None:
+        self.app_settings = app_settings
         self.connection = None
         self.channel = None
 
@@ -38,7 +38,7 @@ class MessageBusClient:
         return self.connection is not None
 
     def connect(self):
-        self.connection = pika.BlockingConnection(self.settings.message_bus.connection_params)
+        self.connection = pika.BlockingConnection(self.app_settings.message_bus.connection_params)
         self.channel = self.connection.channel()
 
     def disconnect(self):
@@ -47,10 +47,18 @@ class MessageBusClient:
             self.connection = None
             self.channel = None
 
-    def publish(self, routing_key: str, message: dict):
-        assert self.channel, "Clien is not connected"
+    def publish(self, queue: str, message: dict):
+        if not self.is_connected:
+            raise Exception("Client is not connected")
 
-        self.channel.basic_publish(exchange="", routing_key=routing_key, body=orjson.dumps(message))
+        self.channel.basic_publish(
+            exchange="",
+            routing_key=queue,
+            body=orjson.dumps(message),
+            properties=pika.BasicProperties(
+                delivery_mode=pika.DeliveryMode.Persistent,
+            )
+        )
 
 
 class MongoDBClient:

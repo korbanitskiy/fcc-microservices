@@ -15,7 +15,6 @@ async def health_check():
 
 @login_router.post("/login", response_model=schemas.Token)
 async def login(
-    settings: Annotated[settings.AppSettings, Depends(context.get_app_settings)],
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     user_service: Annotated[services.UserService, Depends(context.get_user_service)],
 ):
