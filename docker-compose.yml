@@ -1,0 +1,56 @@
+version: "3.6"
+
+services:
+
+  gateway:
+    build:
+      context: services/gateway
+      dockerfile: Dockerfile
+    command:
+      "uvicorn gateway.app:app --host=0.0.0.0 --port=8000 --reload"
+    volumes:
+      - ./services/gateway/src:/app
+    ports:
+      - "8080:8000"
+    env_file:
+      - ./services/gateway/.env
+    depends_on:
+      - message_bus
+      - media_db
+      - auth
+
+  auth:
+    build:
+      context: services/auth
+      dockerfile: Dockerfile
+    command:
+      "uvicorn auth.app:app --host=0.0.0.0 --port=8000 --reload"
+    volumes:
+      - ./services/auth/src:/app
+    env_file:
+      - ./services/auth/.env
+    depends_on:
+      - auth_db
+
+  auth_db:
+    image: postgres:16.0-alpine
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: auth_user
+      POSTGRES_DB: auth_db
+    healthcheck:
+      test: ["CMD", "pg_isready", "--dbname", "auth_db"]
+      interval: "10s"
+      timeout: "10s"
+      start_period: "5s"
+      retries: 5
+    ports:
+      - "5432:5432"
+
+  message_bus:
+    image: rabbitmq:3.12
+    ports:
+      - "5672:5672"
+
+  media_db:
+    image: mongo:7.0
