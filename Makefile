@@ -1,7 +1,7 @@
 SHELL = /bin/bash
 
 
-.PHONY: format build up
+.PHONY: format build up test
 
 format:
 	@ pre-commit run --all-files

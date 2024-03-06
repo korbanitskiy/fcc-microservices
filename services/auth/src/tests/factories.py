@@ -38,3 +38,4 @@ class UserFactory(OrmarFactory):
     name = Sequence(lambda n: f"user_name-{n}")
     password = get_password_hash("password")
     disabled = False
+    is_admin = False

@@ -8,10 +8,10 @@ from auth import models, services, settings
 from .factories import UserFactory
 
 app_settings = settings.get_app_settings()
-engine = sqlalchemy.create_engine(app_settings.db.uri, connect_args={"check_same_thread": False})
+engine = sqlalchemy.create_engine(str(models.database.url))
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session", autouse=True)
 def event_loop(request):
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
@@ -19,7 +19,7 @@ def event_loop(request):
 
 
 @pytest.fixture(scope="session")
-def create_test_database():
+async def create_test_database():
     models.metadata.create_all(engine)
     yield
     models.metadata.drop_all(engine)
@@ -39,7 +39,10 @@ async def admin_user(app_db):
 
 @pytest.fixture(autouse=True)
 async def db_transaction(app_db):
+    print(11)
     async with app_db.transaction(force_rollback=True):
+        print(12)
+
         yield app_db
 
 

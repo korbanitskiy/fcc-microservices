@@ -14,7 +14,7 @@ RUN poetry config virtualenvs.create false
 COPY pyproject.toml poetry.lock /app
 RUN poetry install --no-interaction --no-root --no-cache
 
-COPY ./src /app/
+COPY services/gateway/src /app/
 
 ENV PYTHONPATH "${PYTHONPATH}:/app"
 

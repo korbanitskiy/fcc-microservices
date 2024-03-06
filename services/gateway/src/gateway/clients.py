@@ -64,7 +64,7 @@ class MessageBusClient:
 class MongoDBClient:
     def __init__(self, settings: settings.AppSettings) -> None:
         self.settings = settings
-        self.client = None
+        self.client: MongoClient  = None
 
     @property
     def is_connected(self) -> bool:

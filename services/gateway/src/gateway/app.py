@@ -32,6 +32,7 @@ app = create_app()
 @app.on_event("startup")
 async def startup() -> None:
     connect_to_message_bus(app.state.message_bus)
+    connect_to_mongodb(app.state.mongodb)
 
 
 @app.on_event("shutdown")
