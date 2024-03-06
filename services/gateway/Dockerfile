@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 EXPOSE 8000
 WORKDIR /app
@@ -8,8 +8,12 @@ RUN apt-get update \
     build-essential \
     && pip install --no-cache-dir --upgrade pip
 
-COPY ./requirements.txt /app
-RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN pip install poetry==1.6.1
+RUN poetry config virtualenvs.create false
+
+COPY pyproject.toml poetry.lock /app
+RUN poetry install --no-interaction --no-root --no-cache
+
 COPY ./src /app/
 
 ENV PYTHONPATH "${PYTHONPATH}:/app"

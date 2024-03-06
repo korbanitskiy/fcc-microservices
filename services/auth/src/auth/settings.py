@@ -1,10 +1,9 @@
 from functools import cache
 
 import pydantic
-import pydantic_settings
 
 
-class BaseSettings(pydantic_settings.BaseSettings):
+class BaseSettings(pydantic.BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
@@ -12,7 +11,7 @@ class BaseSettings(pydantic_settings.BaseSettings):
 
 
 class DBSettings(BaseSettings):
-    DB_URI: pydantic.PostgresDsn
+    DB_HOST: pydantic.PostgresDsn
     DB_POOL_SIZE_MIN: int
     DB_POOL_SIZE_MAX: int
     DB_TEST: str | None = None
