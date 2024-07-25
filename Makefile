@@ -11,4 +11,7 @@ build:
 	@ docker compose build
 
 up:
-	docker compose up
+	docker compose up --build
+
+test:
+	docker compose exec auth pytest 

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "fcc-microservices"
+name = "fcc-microservices-auth"
 version = "0.1.0"
 description = ""
 authors = ["DimaK <korbanitskiy@gmail.com>"]

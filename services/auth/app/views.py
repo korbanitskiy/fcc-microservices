@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from typing_extensions import Annotated
 
-from auth import context, models, schemas, services
+from app import context, models, schemas, services
 
 login_router = APIRouter()
 users_router = APIRouter(dependencies=[Depends(context.get_current_user)])

@@ -5,7 +5,7 @@ import ormar
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-from auth import models, schemas, settings
+from app import models, schemas, settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

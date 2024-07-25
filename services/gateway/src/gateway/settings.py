@@ -13,12 +13,12 @@ class BaseSettings(pydantic.BaseSettings):
 
 class MongoDBSettings(BaseSettings):
     MONGODB_HOST: str
-    MONGODB_PORT: int
+    MONGODB_PORT: int = 27017
 
 
 class MessageBusSettings(BaseSettings):
     MESSAGE_BUS_HOST: str
-    MESSAGE_BUS_PORT: int
+    MESSAGE_BUS_PORT: int = 5672
 
     @property
     def connection_params(self) -> pika.ConnectionParameters:

@@ -4,7 +4,7 @@ import databases
 import ormar
 import sqlalchemy
 
-from auth.settings import get_app_settings
+from app.settings import get_app_settings
 
 settings = get_app_settings()
 metadata = sqlalchemy.MetaData()

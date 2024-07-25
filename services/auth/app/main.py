@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from tenacity import retry, stop_after_attempt, wait_fixed
 
-from auth import models, views
+from app import models, views
 
 
 @retry(wait=wait_fixed(5), stop=stop_after_attempt(5))

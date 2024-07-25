@@ -3,7 +3,7 @@ import asyncio
 import pytest
 import sqlalchemy
 
-from auth import models, services, settings
+from app import models, services, settings
 
 from .factories import UserFactory
 
